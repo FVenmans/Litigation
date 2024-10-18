@@ -34,7 +34,7 @@ foreach xxx in RET { //add wti when data is available
 	//make eventd indicate only one single event per duplicate, else 0
 	bys id date (duplicate): replace eventd= eventd==1 & SumEvents==_n //on first event day, all duplicates will have SumEvents==1, on the second event day, all duplicates will have SumEvents==2 etc 
 	//set event-related variables to missing for the non-relevant events. For example if a company sued 3 times, the event-related variable will be set to missing twice.
-	foreach xxx in novelw courtlaww govplaintiffw interestw damagesw majorw novel_d courtlaw_d govplaintiff_d interest_d damages_d major_d  profile_sum Decision impact oldrank{
+	foreach xxx in novelw courtlaww govplaintiffw interestw damagesw majorw novel_d courtlaw_d govplaintiff_d interest_d damages_d major_d  profile_sum Decision impact {    //oldrank
 		replace `xxx'=. if eventd==0 
 	}
 //convert missings to the value on the day of the relevant company-event 
@@ -43,9 +43,9 @@ foreach xxx in RET { //add wti when data is available
 	}
 	by id2: egen decision=max(Decision) //
 	by id2: egen carbon_maj=max(carbon_major)
-	by id2: egen oldrank_=min(oldrank)
-	replace oldrank_=oldrank_==-2 //make oldrank_ a dummy , oldrank is the initial importance weighting in the database
-	drop *_d Decision carbon_major oldrank
+	//by id2: egen oldrank_=min(oldrank)
+	//replace oldrank_=oldrank_==-2 //make oldrank_ a dummy , oldrank is the initial importance weighting in the database
+	drop *_d Decision carbon_major //oldrank
 
 /*//Sensitivity analysis: make portfolios for the events with many companies. (comment this out in main approach)
 	egen id3_temp=group(date) if eventd==1 //id3 is an identifier of a legal case (possibly against several companies)

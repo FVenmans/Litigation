@@ -29,10 +29,10 @@ replace majorw=majorw*3
 duplicates drop date gvkey , force  
 save Eventdates, replace
 
-import excel "eventdates_Mar22.xlsx", sheet("Filings") firstrow clear
+/*import excel "eventdates_Mar22.xlsx", sheet("Filings") firstrow clear
 destring gvkey, replace
 keep gvkey date oldrank
-save Oldrank, replace
+save Oldrank, replace */
 
 //MERGE DATA
 use returns.dta, clear  //returns_update for 21//11/2023 data (which are in original currency)
@@ -43,9 +43,9 @@ merge m:1 date gvkey using Eventdates
 gen eventd=_merge==3
 drop if _merge==2 
 drop _merge
-merge m:1 date gvkey using Oldrank
+/*merge m:1 date gvkey using Oldrank
 drop if _merge==2
-drop _merge
+drop _merge*/
 merge m:1 gvkey using gvkey_names
 drop if _merge==2
 drop _merge
